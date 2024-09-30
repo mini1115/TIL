@@ -2,66 +2,72 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-        static class Country {
+    
+     static class Country{
         int index;
         int gold;
         int silver;
         int bronze;
-
-        public Country(int index, int gold, int silver, int bronze) {
+        int rate;
+        
+        public Country(int index,int gold,int silver,int bronze,int rank){
             this.index = index;
             this.gold = gold;
             this.silver = silver;
             this.bronze = bronze;
-        }
-        public int getIndex(){
-            return this.index;
+            this.rate = rate;
         }
     }
+    
     public static void main(String args[]) throws IOException {
+        int answer =0;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());;
-        // 국가의 수
+        StringTokenizer st= new StringTokenizer(br.readLine());
+        // Number
         int N = Integer.parseInt(st.nextToken());
-        // 알고 싶은 정답
-        int target = Integer.parseInt(st.nextToken());
-        // 정보 배열
+        // targetNumber
+        int M = Integer.parseInt(st.nextToken());
+        
         List<Country> countries = new ArrayList<>();
         
-        for(int i=1;i<=N;i++){
-            st = new StringTokenizer(br.readLine());;
+        for (int i=0;i<N;i++){
+            st = new StringTokenizer(br.readLine());
+            int index = Integer.parseInt(st.nextToken());
             int gold = Integer.parseInt(st.nextToken());
             int silver = Integer.parseInt(st.nextToken());
             int bronze = Integer.parseInt(st.nextToken());
-            countries.add(new Country(i,gold,silver,bronze));
+            countries.add(new Country(index,gold,silver,bronze,0));
         }
-        
+        // 정렬렬
         countries.sort((c1,c2)->{
-            if(c1.gold != c2.gold){
-                return c2.gold-c1.gold;
-            } else if(c1.silver != c2.silver){
-                return c2.silver - c1.silver;
-            }else {
-                return c2.bronze - c1.bronze;
+            if(c1.gold==c2.gold){
+                if(c1.silver==c2.silver){
+                    return c2.bronze - c1.bronze;
+                }else{
+                    return c2.silver - c1.silver;
+                }
+            }else{
+                return c2.gold - c1.gold;
             }
         });
+        
+        countries.get(0).rate = 1;
+        
 
-        int rank =1;
-       for (int i = 0; i < countries.size(); i++) {
-            if (i > 0 && 
-                countries.get(i).gold == countries.get(i - 1).gold &&
-                countries.get(i).silver == countries.get(i - 1).silver &&
-                countries.get(i).bronze == countries.get(i - 1).bronze) {
-                // 이전 국가와 동일한 메달 수일 경우 같은 순위 유지
-                continue;
-            } else {
-                rank = i + 1; // 순위 업데이트
+        for(int i=1;i<N;i++){
+            Country country = countries.get(i);
+            if(countries.get(i).index == M){
+                answer = i;
             }
-            if (countries.get(i).index == target) {
-                System.out.println(rank);
-                break;
+            if(country.gold == countries.get(i-1).gold &&
+            country.silver == countries.get(i-1).silver &&
+            country.bronze == countries.get(i-1).bronze){
+                countries.get(i).rate = countries.get(i-1).rate;
+            }
+            else{
+                countries.get(i).rate = i+1;
             }
         }
+        System.out.println(countries.get(answer).rate);
     }
-
 }
