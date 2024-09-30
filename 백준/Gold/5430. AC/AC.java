@@ -19,10 +19,8 @@ public class Main {
             String input  = br.readLine();
             input = input.replaceAll("[\\[\\] ]", ""); // 대괄호와 공백 제거
             String[] strNumbers = input.split(","); // 콤마로 분리
-            for (String strNumber : strNumbers) {
-                if (!strNumber.isEmpty()) {
-                deque.add(Integer.parseInt(strNumber));
-                }
+            for(int i=0;i<N;i++){
+                deque.add(Integer.parseInt(strNumbers[i]));
             }
             System.out.println(ac(deque,command));
         }
@@ -33,7 +31,7 @@ public class Main {
         for(char c :command.toCharArray()){
             if(c == 'R' ){
                 flag = !flag;
-            }else if(c == 'D'){
+            }else{
             // Drop 수행
             // queue 배열이 비어있을경우
                 if(arr.isEmpty()){
