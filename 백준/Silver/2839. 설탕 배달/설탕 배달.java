@@ -1,24 +1,33 @@
-import java.util.*;
 import java.io.*;
-public class Main{
-    public static void main(String args[]) throws IOException {
-        int answer = 0;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        
-        System.out.println(divide(N));
+import java.util.*;
 
+public class Main {
+    static int N;
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st= new StringTokenizer(br.readLine());
+        // 3 ≤ N ≤ 5000
+        N = Integer.parseInt(st.nextToken()); 
+        // 봉지는 3킬로그램 봉지와 5킬로그램 봉지
+        System.out.println(deliver(N));
+        // 배달하는 봉지의 최소 개수 출력한다
+        
     }
-    static int divide(int N){
-        // 5kg 나눌수 있는 경우 큰 몫부터 0까지 내려간다.
-        for(int i=N/5;i>=0;i--){
-            int remain = N -(5*i);
-            //3으로 나눈 나머지가 0일 경우
-            if(remain %3 ==0){
-                return (i+ remain/3);
+    static int deliver(int sugar){
+        int answer = 0;
+        while(N>0){
+            if((N%5) == 0){
+                // N이 5의 배수인가?
+                answer += N/5 ;
+                N  = N % 5 ;
+            }else if(N>=3){
+                N = N - 3;
+                answer++;
+            }else{
+                return -1;
             }
         }
-        return -1;
+        
+        return answer;
     }
-    
 }
