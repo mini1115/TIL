@@ -25,9 +25,10 @@ public class Main {
         } //for
         
         //Map을 key값으로 오름차순 정렬, ArrayList 순서대로 출력.
-        for(Map.Entry<Integer,ArrayList<String>>entry:info.entrySet()){
-            for(int i=0;i<entry.getValue().size();i++){
-                System.out.println(entry.getKey()+" "+entry.getValue().get(i));
+       
+        for(int age:info.keySet()){
+            for(int i=0;i<info.get(age).size();i++){
+                System.out.println(age+" "+info.get(age).get(i));
             }
         }
     }
