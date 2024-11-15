@@ -36,7 +36,7 @@
         "id": "aCC147-PiLFO",
         "outputId": "c9fab4f6-5a18-4411-b634-2728602cd372"
       },
-      "execution_count": 83,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "display_data",
@@ -258,7 +258,7 @@
         "id": "FViFnBn2iJ_3",
         "outputId": "94a96a2e-97c5-448a-9b35-6ee17f5711d6"
       },
-      "execution_count": 85,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -285,7 +285,7 @@
           "height": 143
         }
       },
-      "execution_count": 88,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -607,7 +607,7 @@
           "height": 366
         }
       },
-      "execution_count": 90,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -705,7 +705,7 @@
           "base_uri": "https://localhost:8080/"
         }
       },
-      "execution_count": 91,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -744,7 +744,7 @@
           "height": 335
         }
       },
-      "execution_count": 93,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -838,7 +838,7 @@
           "height": 178
         }
       },
-      "execution_count": 94,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -902,7 +902,7 @@
       "metadata": {
         "id": "y6aK7iHnqYd4"
       },
-      "execution_count": 95,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -921,7 +921,7 @@
           "base_uri": "https://localhost:8080/"
         }
       },
-      "execution_count": 96,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -951,7 +951,7 @@
           "base_uri": "https://localhost:8080/"
         }
       },
-      "execution_count": 107,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1101,7 +1101,7 @@
           "base_uri": "https://localhost:8080/"
         }
       },
-      "execution_count": 108,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -1128,7 +1128,7 @@
           "height": 143
         }
       },
-      "execution_count": 109,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1434,7 +1434,7 @@
           "base_uri": "https://localhost:8080/"
         }
       },
-      "execution_count": 118,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "execute_result",
@@ -1456,7 +1456,7 @@
       "metadata": {
         "id": "9t54n948uiM1"
       },
-      "execution_count": 119,
+      "execution_count": null,
       "outputs": []
     },
     {
@@ -1495,7 +1495,7 @@
           "height": 161
         }
       },
-      "execution_count": 120,
+      "execution_count": null,
       "outputs": [
         {
           "output_type": "stream",
@@ -1770,6 +1770,2416 @@
           },
           "metadata": {},
           "execution_count": 120
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Q. 이직 여부 예측\n",
+        "- 새로운 일자리를 찾을지 예측하시오\n",
+        "  - 제공된 데이터 목록 : hr_train.csv,hr_test.csv\n",
+        "  - 예측할 컬럼 : target(0: 새 일자리 찾지 않음, 1: 새 일자리 찾음)\n",
+        "- 학습용(train)을 이용해 새 일자리를 찾을지 예측하는 모델을 만든 후 이를 평가용 데이터(test)에 적용해 얻은 예측값을 다음과 같은 형식의 csv 파일로 생성하시오.\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "BDo_HaGAlIH6"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import files\n",
+        "uploaded = files.upload()"
+      ],
+      "metadata": {
+        "id": "ypj90TMMlkN0",
+        "outputId": "91f4a106-f95c-4710-8b15-4a383a063070",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 41
+        }
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "\n",
+              "     <input type=\"file\" id=\"files-60a67b1c-0963-4b3b-9aca-92ce125e3408\" name=\"files[]\" multiple disabled\n",
+              "        style=\"border:none\" />\n",
+              "     <output id=\"result-60a67b1c-0963-4b3b-9aca-92ce125e3408\">\n",
+              "      Upload widget is only available when the cell has been executed in the\n",
+              "      current browser session. Please rerun this cell to enable.\n",
+              "      </output>\n",
+              "      <script>// Copyright 2017 Google LLC\n",
+              "//\n",
+              "// Licensed under the Apache License, Version 2.0 (the \"License\");\n",
+              "// you may not use this file except in compliance with the License.\n",
+              "// You may obtain a copy of the License at\n",
+              "//\n",
+              "//      http://www.apache.org/licenses/LICENSE-2.0\n",
+              "//\n",
+              "// Unless required by applicable law or agreed to in writing, software\n",
+              "// distributed under the License is distributed on an \"AS IS\" BASIS,\n",
+              "// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n",
+              "// See the License for the specific language governing permissions and\n",
+              "// limitations under the License.\n",
+              "\n",
+              "/**\n",
+              " * @fileoverview Helpers for google.colab Python module.\n",
+              " */\n",
+              "(function(scope) {\n",
+              "function span(text, styleAttributes = {}) {\n",
+              "  const element = document.createElement('span');\n",
+              "  element.textContent = text;\n",
+              "  for (const key of Object.keys(styleAttributes)) {\n",
+              "    element.style[key] = styleAttributes[key];\n",
+              "  }\n",
+              "  return element;\n",
+              "}\n",
+              "\n",
+              "// Max number of bytes which will be uploaded at a time.\n",
+              "const MAX_PAYLOAD_SIZE = 100 * 1024;\n",
+              "\n",
+              "function _uploadFiles(inputId, outputId) {\n",
+              "  const steps = uploadFilesStep(inputId, outputId);\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  // Cache steps on the outputElement to make it available for the next call\n",
+              "  // to uploadFilesContinue from Python.\n",
+              "  outputElement.steps = steps;\n",
+              "\n",
+              "  return _uploadFilesContinue(outputId);\n",
+              "}\n",
+              "\n",
+              "// This is roughly an async generator (not supported in the browser yet),\n",
+              "// where there are multiple asynchronous steps and the Python side is going\n",
+              "// to poll for completion of each step.\n",
+              "// This uses a Promise to block the python side on completion of each step,\n",
+              "// then passes the result of the previous step as the input to the next step.\n",
+              "function _uploadFilesContinue(outputId) {\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  const steps = outputElement.steps;\n",
+              "\n",
+              "  const next = steps.next(outputElement.lastPromiseValue);\n",
+              "  return Promise.resolve(next.value.promise).then((value) => {\n",
+              "    // Cache the last promise value to make it available to the next\n",
+              "    // step of the generator.\n",
+              "    outputElement.lastPromiseValue = value;\n",
+              "    return next.value.response;\n",
+              "  });\n",
+              "}\n",
+              "\n",
+              "/**\n",
+              " * Generator function which is called between each async step of the upload\n",
+              " * process.\n",
+              " * @param {string} inputId Element ID of the input file picker element.\n",
+              " * @param {string} outputId Element ID of the output display.\n",
+              " * @return {!Iterable<!Object>} Iterable of next steps.\n",
+              " */\n",
+              "function* uploadFilesStep(inputId, outputId) {\n",
+              "  const inputElement = document.getElementById(inputId);\n",
+              "  inputElement.disabled = false;\n",
+              "\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  outputElement.innerHTML = '';\n",
+              "\n",
+              "  const pickedPromise = new Promise((resolve) => {\n",
+              "    inputElement.addEventListener('change', (e) => {\n",
+              "      resolve(e.target.files);\n",
+              "    });\n",
+              "  });\n",
+              "\n",
+              "  const cancel = document.createElement('button');\n",
+              "  inputElement.parentElement.appendChild(cancel);\n",
+              "  cancel.textContent = 'Cancel upload';\n",
+              "  const cancelPromise = new Promise((resolve) => {\n",
+              "    cancel.onclick = () => {\n",
+              "      resolve(null);\n",
+              "    };\n",
+              "  });\n",
+              "\n",
+              "  // Wait for the user to pick the files.\n",
+              "  const files = yield {\n",
+              "    promise: Promise.race([pickedPromise, cancelPromise]),\n",
+              "    response: {\n",
+              "      action: 'starting',\n",
+              "    }\n",
+              "  };\n",
+              "\n",
+              "  cancel.remove();\n",
+              "\n",
+              "  // Disable the input element since further picks are not allowed.\n",
+              "  inputElement.disabled = true;\n",
+              "\n",
+              "  if (!files) {\n",
+              "    return {\n",
+              "      response: {\n",
+              "        action: 'complete',\n",
+              "      }\n",
+              "    };\n",
+              "  }\n",
+              "\n",
+              "  for (const file of files) {\n",
+              "    const li = document.createElement('li');\n",
+              "    li.append(span(file.name, {fontWeight: 'bold'}));\n",
+              "    li.append(span(\n",
+              "        `(${file.type || 'n/a'}) - ${file.size} bytes, ` +\n",
+              "        `last modified: ${\n",
+              "            file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() :\n",
+              "                                    'n/a'} - `));\n",
+              "    const percent = span('0% done');\n",
+              "    li.appendChild(percent);\n",
+              "\n",
+              "    outputElement.appendChild(li);\n",
+              "\n",
+              "    const fileDataPromise = new Promise((resolve) => {\n",
+              "      const reader = new FileReader();\n",
+              "      reader.onload = (e) => {\n",
+              "        resolve(e.target.result);\n",
+              "      };\n",
+              "      reader.readAsArrayBuffer(file);\n",
+              "    });\n",
+              "    // Wait for the data to be ready.\n",
+              "    let fileData = yield {\n",
+              "      promise: fileDataPromise,\n",
+              "      response: {\n",
+              "        action: 'continue',\n",
+              "      }\n",
+              "    };\n",
+              "\n",
+              "    // Use a chunked sending to avoid message size limits. See b/62115660.\n",
+              "    let position = 0;\n",
+              "    do {\n",
+              "      const length = Math.min(fileData.byteLength - position, MAX_PAYLOAD_SIZE);\n",
+              "      const chunk = new Uint8Array(fileData, position, length);\n",
+              "      position += length;\n",
+              "\n",
+              "      const base64 = btoa(String.fromCharCode.apply(null, chunk));\n",
+              "      yield {\n",
+              "        response: {\n",
+              "          action: 'append',\n",
+              "          file: file.name,\n",
+              "          data: base64,\n",
+              "        },\n",
+              "      };\n",
+              "\n",
+              "      let percentDone = fileData.byteLength === 0 ?\n",
+              "          100 :\n",
+              "          Math.round((position / fileData.byteLength) * 100);\n",
+              "      percent.textContent = `${percentDone}% done`;\n",
+              "\n",
+              "    } while (position < fileData.byteLength);\n",
+              "  }\n",
+              "\n",
+              "  // All done.\n",
+              "  yield {\n",
+              "    response: {\n",
+              "      action: 'complete',\n",
+              "    }\n",
+              "  };\n",
+              "}\n",
+              "\n",
+              "scope.google = scope.google || {};\n",
+              "scope.google.colab = scope.google.colab || {};\n",
+              "scope.google.colab._files = {\n",
+              "  _uploadFiles,\n",
+              "  _uploadFilesContinue,\n",
+              "};\n",
+              "})(self);\n",
+              "</script> "
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "train = pd.read_csv('hr_train.csv')\n",
+        "test = pd.read_csv('hr_test.csv')\n",
+        "train.shape,test.shape"
+      ],
+      "metadata": {
+        "id": "z3ky_1QkmFRM",
+        "outputId": "53094d0c-6689-4efb-b2db-5d23556390bf",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((15326, 14), (3832, 13))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 5
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.head(3)"
+      ],
+      "metadata": {
+        "id": "wg62HLgymaTT",
+        "outputId": "6b05586c-f9ac-482a-afb0-55f78a11ed0d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 163
+        }
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "   enrollee_id     city  city_development_index gender  \\\n",
+              "0        30266  city_84                   0.698   Male   \n",
+              "1        13254  city_16                   0.910   Male   \n",
+              "2        31675  city_21                   0.624   Male   \n",
+              "\n",
+              "       relevent_experience enrolled_university education_level  \\\n",
+              "0   No relevent experience    Full time course     High School   \n",
+              "1  Has relevent experience       no_enrollment        Graduate   \n",
+              "2   No relevent experience    Full time course     High School   \n",
+              "\n",
+              "  major_discipline experience company_size company_type last_new_job  \\\n",
+              "0              NaN          1      100-500      Pvt Ltd        never   \n",
+              "1             STEM         15        50-99      Pvt Ltd            1   \n",
+              "2              NaN          3          NaN          NaN        never   \n",
+              "\n",
+              "   training_hours  target  \n",
+              "0              15     0.0  \n",
+              "1               4     0.0  \n",
+              "2              12     0.0  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-952313fd-2bad-4356-8a1a-c5b4eaa5543b\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>enrollee_id</th>\n",
+              "      <th>city</th>\n",
+              "      <th>city_development_index</th>\n",
+              "      <th>gender</th>\n",
+              "      <th>relevent_experience</th>\n",
+              "      <th>enrolled_university</th>\n",
+              "      <th>education_level</th>\n",
+              "      <th>major_discipline</th>\n",
+              "      <th>experience</th>\n",
+              "      <th>company_size</th>\n",
+              "      <th>company_type</th>\n",
+              "      <th>last_new_job</th>\n",
+              "      <th>training_hours</th>\n",
+              "      <th>target</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>30266</td>\n",
+              "      <td>city_84</td>\n",
+              "      <td>0.698</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>No relevent experience</td>\n",
+              "      <td>Full time course</td>\n",
+              "      <td>High School</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>1</td>\n",
+              "      <td>100-500</td>\n",
+              "      <td>Pvt Ltd</td>\n",
+              "      <td>never</td>\n",
+              "      <td>15</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>13254</td>\n",
+              "      <td>city_16</td>\n",
+              "      <td>0.910</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>Has relevent experience</td>\n",
+              "      <td>no_enrollment</td>\n",
+              "      <td>Graduate</td>\n",
+              "      <td>STEM</td>\n",
+              "      <td>15</td>\n",
+              "      <td>50-99</td>\n",
+              "      <td>Pvt Ltd</td>\n",
+              "      <td>1</td>\n",
+              "      <td>4</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>31675</td>\n",
+              "      <td>city_21</td>\n",
+              "      <td>0.624</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>No relevent experience</td>\n",
+              "      <td>Full time course</td>\n",
+              "      <td>High School</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>3</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>never</td>\n",
+              "      <td>12</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-952313fd-2bad-4356-8a1a-c5b4eaa5543b')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-952313fd-2bad-4356-8a1a-c5b4eaa5543b button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-952313fd-2bad-4356-8a1a-c5b4eaa5543b');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-e4377097-584b-4236-a75e-189f624bcc1b\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-e4377097-584b-4236-a75e-189f624bcc1b')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-e4377097-584b-4236-a75e-189f624bcc1b button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "train",
+              "summary": "{\n  \"name\": \"train\",\n  \"rows\": 15326,\n  \"fields\": [\n    {\n      \"column\": \"enrollee_id\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 9615,\n        \"min\": 2,\n        \"max\": 33380,\n        \"num_unique_values\": 15326,\n        \"samples\": [\n          26851,\n          31908,\n          32146\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"city\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 123,\n        \"samples\": [\n          \"city_83\",\n          \"city_14\",\n          \"city_24\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"city_development_index\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0.12337176655247739,\n        \"min\": 0.4479999999999999,\n        \"max\": 0.949,\n        \"num_unique_values\": 93,\n        \"samples\": [\n          0.899,\n          0.55,\n          0.7759999999999999\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"gender\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 3,\n        \"samples\": [\n          \"Male\",\n          \"Other\",\n          \"Female\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"relevent_experience\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Has relevent experience\",\n          \"No relevent experience\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"enrolled_university\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 3,\n        \"samples\": [\n          \"Full time course\",\n          \"no_enrollment\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"education_level\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 5,\n        \"samples\": [\n          \"Graduate\",\n          \"Phd\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"major_discipline\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 6,\n        \"samples\": [\n          \"STEM\",\n          \"Arts\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"experience\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 22,\n        \"samples\": [\n          \"1\",\n          \"16\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"company_size\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 8,\n        \"samples\": [\n          \"50-99\",\n          \"5000-9999\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"company_type\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 6,\n        \"samples\": [\n          \"Pvt Ltd\",\n          \"Funded Startup\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"last_new_job\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 6,\n        \"samples\": [\n          \"never\",\n          \"1\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"training_hours\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 59,\n        \"min\": 1,\n        \"max\": 336,\n        \"num_unique_values\": 241,\n        \"samples\": [\n          45,\n          44\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"target\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0.4321758725966829,\n        \"min\": 0.0,\n        \"max\": 1.0,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          1.0,\n          0.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.isnull().sum()\n",
+        "# gender , enrolled_university , education_level , major_discipline , experience , company_size, company_type , last_new_job"
+      ],
+      "metadata": {
+        "id": "H9W0MqVLmbQ-",
+        "outputId": "3ec80a8e-3b53-43c9-ac54-7a341c28c289",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 523
+        }
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "enrollee_id                  0\n",
+              "city                         0\n",
+              "city_development_index       0\n",
+              "gender                    3576\n",
+              "relevent_experience          0\n",
+              "enrolled_university        314\n",
+              "education_level            365\n",
+              "major_discipline          2281\n",
+              "experience                  54\n",
+              "company_size              4787\n",
+              "company_type              4943\n",
+              "last_new_job               342\n",
+              "training_hours               0\n",
+              "target                       0\n",
+              "dtype: int64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>0</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>enrollee_id</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>city</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>city_development_index</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>gender</th>\n",
+              "      <td>3576</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>relevent_experience</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>enrolled_university</th>\n",
+              "      <td>314</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>education_level</th>\n",
+              "      <td>365</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>major_discipline</th>\n",
+              "      <td>2281</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>experience</th>\n",
+              "      <td>54</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>company_size</th>\n",
+              "      <td>4787</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>company_type</th>\n",
+              "      <td>4943</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>last_new_job</th>\n",
+              "      <td>342</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>training_hours</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>target</th>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> int64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train['target'].value_counts()"
+      ],
+      "metadata": {
+        "id": "2Bi6V9I6mo-E",
+        "outputId": "8fecda60-6d3b-4f60-bc29-17f71ad45736",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 178
+        }
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "target\n",
+              "0.0    11517\n",
+              "1.0     3809\n",
+              "Name: count, dtype: int64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>count</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>target</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0.0</th>\n",
+              "      <td>11517</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1.0</th>\n",
+              "      <td>3809</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> int64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.select_dtypes(include='O').nunique()"
+      ],
+      "metadata": {
+        "id": "GCE7hyShm4d-",
+        "outputId": "a8690300-c388-418b-fc4b-e00059352f82",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 397
+        }
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "city                   123\n",
+              "gender                   3\n",
+              "relevent_experience      2\n",
+              "enrolled_university      3\n",
+              "education_level          5\n",
+              "major_discipline         6\n",
+              "experience              22\n",
+              "company_size             8\n",
+              "company_type             6\n",
+              "last_new_job             6\n",
+              "dtype: int64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>0</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>city</th>\n",
+              "      <td>123</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>gender</th>\n",
+              "      <td>3</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>relevent_experience</th>\n",
+              "      <td>2</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>enrolled_university</th>\n",
+              "      <td>3</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>education_level</th>\n",
+              "      <td>5</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>major_discipline</th>\n",
+              "      <td>6</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>experience</th>\n",
+              "      <td>22</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>company_size</th>\n",
+              "      <td>8</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>company_type</th>\n",
+              "      <td>6</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>last_new_job</th>\n",
+              "      <td>6</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> int64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "cols = train.select_dtypes(include='O').columns\n",
+        "for col in cols:\n",
+        "  s_train = set(train[col])\n",
+        "  s_test = set(test[col])\n",
+        "  same = s_train == s_test\n",
+        "  if(same):\n",
+        "    print(col,'일치함')\n",
+        "  else:\n",
+        "    print(col,'불일치')\n",
+        "    # city 불일치"
+      ],
+      "metadata": {
+        "id": "1FvFdkZjnLZB",
+        "outputId": "5bc9c592-3534-4d27-eae1-052797057613",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 13,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "city 불일치\n",
+            "gender 일치함\n",
+            "relevent_experience 일치함\n",
+            "enrolled_university 일치함\n",
+            "education_level 일치함\n",
+            "major_discipline 일치함\n",
+            "experience 일치함\n",
+            "company_size 일치함\n",
+            "company_type 일치함\n",
+            "last_new_job 일치함\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "target = train.pop('target')"
+      ],
+      "metadata": {
+        "id": "iwKZrYxono-L"
+      },
+      "execution_count": 14,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train = train.fillna('X')\n",
+        "test = test.fillna('X')"
+      ],
+      "metadata": {
+        "id": "V0po_Kq6ns_b"
+      },
+      "execution_count": 15,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "combined = pd.concat([train,test])\n",
+        "combined_dummies = pd.get_dummies(combined)\n",
+        "n_train = len(train)\n",
+        "train = combined_dummies[:n_train]\n",
+        "test = combined_dummies[n_train:]"
+      ],
+      "metadata": {
+        "id": "9ind4TC0n1Lk"
+      },
+      "execution_count": 17,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_tr,X_val,y_tr,y_val = train_test_split(train,target,test_size=0.2,random_state=0)\n",
+        "X_tr.shape,X_val.shape,y_tr.shape,y_val.shape"
+      ],
+      "metadata": {
+        "id": "OKKQF_tMoHI8",
+        "outputId": "1c57caef-d7f8-4b4c-c4ad-d8f06c599fd8",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 19,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((12260, 195), (3066, 195), (12260,), (3066,))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 19
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "rf = RandomForestClassifier(random_state=0)\n",
+        "rf.fit(X_tr,y_tr)\n",
+        "predict = rf.predict_proba(X_val)"
+      ],
+      "metadata": {
+        "id": "WX4bWWyVoXui"
+      },
+      "execution_count": 20,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.metrics import roc_auc_score\n",
+        "roc_auc = roc_auc_score(y_val,predict[:,1])\n",
+        "print(roc_auc)"
+      ],
+      "metadata": {
+        "id": "7lv_BXjQoj5s",
+        "outputId": "86732308-7d3a-49cd-fd8f-69dd6e48d6ea",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.7730742036233207\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pred = rf.predict_proba(test)\n",
+        "submit = pd.DataFrame({'pred':pred[:,1]})\n",
+        "submit.to_csv('result.csv',index=False)\n",
+        "pd.read_csv('result.csv').head(3)"
+      ],
+      "metadata": {
+        "id": "303-XmiIo2kM",
+        "outputId": "442b72d7-72a6-44e7-999a-f5861989d4ae",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 143
+        }
+      },
+      "execution_count": 24,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "   pred\n",
+              "0  0.23\n",
+              "1  0.50\n",
+              "2  0.61"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-e09fef04-1048-411c-82ca-54799b0f4d00\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>pred</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>0.23</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>0.50</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>0.61</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-e09fef04-1048-411c-82ca-54799b0f4d00')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-e09fef04-1048-411c-82ca-54799b0f4d00 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-e09fef04-1048-411c-82ca-54799b0f4d00');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-19793f8d-f0cb-412d-972b-11d938b83e79\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-19793f8d-f0cb-412d-972b-11d938b83e79')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-19793f8d-f0cb-412d-972b-11d938b83e79 button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "summary": "{\n  \"name\": \"pd\",\n  \"rows\": 3,\n  \"fields\": [\n    {\n      \"column\": \"pred\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0.19553345834749952,\n        \"min\": 0.23,\n        \"max\": 0.61,\n        \"num_unique_values\": 3,\n        \"samples\": [\n          0.23,\n          0.5,\n          0.61\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 24
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 성능 개선을 위한\n",
+        "1. 원-핫 인코더-> 레이블 인코더 진행\n",
+        "2. id 제거 - >성능 떨어짐\n",
+        "3. 스케일링(Robust)"
+      ],
+      "metadata": {
+        "id": "rqK6PkIfqeAl"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "train = pd.read_csv('hr_train.csv')\n",
+        "test = pd.read_csv('hr_test.csv')\n",
+        "train.shape,test.shape"
+      ],
+      "metadata": {
+        "id": "HSdt0tsmqiBb",
+        "outputId": "efad912f-089d-4a71-f6ed-3d7f1d6fa1c0",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 48,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((15326, 14), (3832, 13))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 48
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "target = train.pop('target')\n",
+        "train = train.fillna('X')\n",
+        "test = test.fillna('X')"
+      ],
+      "metadata": {
+        "id": "4YWpAVmBqqSw"
+      },
+      "execution_count": 49,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.preprocessing import LabelEncoder\n",
+        "combined = pd.concat([train,test])\n",
+        "cols = train.select_dtypes(include='O').columns\n",
+        "\n",
+        "for col in cols:\n",
+        "  le = LabelEncoder()\n",
+        "  combined[col] = le.fit_transform(combined[col])\n",
+        "\n",
+        "n_train = len(train)\n",
+        "train = combined[:n_train]\n",
+        "test = combined[n_train:]"
+      ],
+      "metadata": {
+        "id": "rddbD_O5qjG0"
+      },
+      "execution_count": 50,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# 스케일링\n",
+        "from sklearn.preprocessing import RobustScaler\n",
+        "scaler = RobustScaler()\n",
+        "n_cols = train.select_dtypes(exclude='O').columns\n",
+        "train = scaler.fit_transform(train)\n",
+        "test = scaler.transform(test)"
+      ],
+      "metadata": {
+        "id": "ZS2SrzOBrraG"
+      },
+      "execution_count": 51,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_tr,X_val,y_tr,y_val = train_test_split(train,target,test_size=0.2,random_state=0)\n",
+        "X_tr.shape,X_val.shape,y_tr.shape,y_val.shape"
+      ],
+      "metadata": {
+        "id": "RlddOFU-qtTs",
+        "outputId": "1c87da27-c168-4ace-a3ec-c99c26fad981",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 52,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((12260, 13), (3066, 13), (12260,), (3066,))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 52
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "rf = RandomForestClassifier(max_depth=5,n_estimators=500,random_state=0)\n",
+        "rf.fit(X_tr,y_tr)\n",
+        "predict = rf.predict_proba(X_val)"
+      ],
+      "metadata": {
+        "id": "wZpb9epurfuB"
+      },
+      "execution_count": 55,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.metrics import roc_auc_score\n",
+        "roc_auc = roc_auc_score(y_val,predict[:,1])\n",
+        "print(roc_auc)"
+      ],
+      "metadata": {
+        "id": "BhtyT-ORrktR",
+        "outputId": "40574000-6fea-4b7b-f44c-83fe8724f6a2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 56,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.7804684610017746\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Q. 신용카드 신청자의 미래 신용 예측\n",
+        "\n",
+        "- 신용카드 신청자의 채무 불이행을 예측하시오.\n",
+        "  - 제공된 데이터 목록 : creditcard_train.csv, creditcard_test.csv\n",
+        "  - 예측할 컬럼 : target(0 : 채무 이행, 1 : 채무 불이행)\n",
+        "\n",
+        "- 학습용 데이터를 이용해 신용카드 신청자의 데이터를 바탕으로 미래의 채무 불이행을 예측하는 모델을 만든 후 평가용 데이터에 적용해 얻은 예측값을 만드시오. (f1 성능지표)"
+      ],
+      "metadata": {
+        "id": "mhBFQS4TtN7j"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import files\n",
+        "uploaded = files.upload()"
+      ],
+      "metadata": {
+        "id": "keaY9fIhtOTL",
+        "outputId": "350e7f59-6cf1-4ca0-8ca6-1ecd614bb763",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 113
+        }
+      },
+      "execution_count": 57,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "\n",
+              "     <input type=\"file\" id=\"files-324dc41d-73bd-4ae5-bd37-2f8202d6b44d\" name=\"files[]\" multiple disabled\n",
+              "        style=\"border:none\" />\n",
+              "     <output id=\"result-324dc41d-73bd-4ae5-bd37-2f8202d6b44d\">\n",
+              "      Upload widget is only available when the cell has been executed in the\n",
+              "      current browser session. Please rerun this cell to enable.\n",
+              "      </output>\n",
+              "      <script>// Copyright 2017 Google LLC\n",
+              "//\n",
+              "// Licensed under the Apache License, Version 2.0 (the \"License\");\n",
+              "// you may not use this file except in compliance with the License.\n",
+              "// You may obtain a copy of the License at\n",
+              "//\n",
+              "//      http://www.apache.org/licenses/LICENSE-2.0\n",
+              "//\n",
+              "// Unless required by applicable law or agreed to in writing, software\n",
+              "// distributed under the License is distributed on an \"AS IS\" BASIS,\n",
+              "// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n",
+              "// See the License for the specific language governing permissions and\n",
+              "// limitations under the License.\n",
+              "\n",
+              "/**\n",
+              " * @fileoverview Helpers for google.colab Python module.\n",
+              " */\n",
+              "(function(scope) {\n",
+              "function span(text, styleAttributes = {}) {\n",
+              "  const element = document.createElement('span');\n",
+              "  element.textContent = text;\n",
+              "  for (const key of Object.keys(styleAttributes)) {\n",
+              "    element.style[key] = styleAttributes[key];\n",
+              "  }\n",
+              "  return element;\n",
+              "}\n",
+              "\n",
+              "// Max number of bytes which will be uploaded at a time.\n",
+              "const MAX_PAYLOAD_SIZE = 100 * 1024;\n",
+              "\n",
+              "function _uploadFiles(inputId, outputId) {\n",
+              "  const steps = uploadFilesStep(inputId, outputId);\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  // Cache steps on the outputElement to make it available for the next call\n",
+              "  // to uploadFilesContinue from Python.\n",
+              "  outputElement.steps = steps;\n",
+              "\n",
+              "  return _uploadFilesContinue(outputId);\n",
+              "}\n",
+              "\n",
+              "// This is roughly an async generator (not supported in the browser yet),\n",
+              "// where there are multiple asynchronous steps and the Python side is going\n",
+              "// to poll for completion of each step.\n",
+              "// This uses a Promise to block the python side on completion of each step,\n",
+              "// then passes the result of the previous step as the input to the next step.\n",
+              "function _uploadFilesContinue(outputId) {\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  const steps = outputElement.steps;\n",
+              "\n",
+              "  const next = steps.next(outputElement.lastPromiseValue);\n",
+              "  return Promise.resolve(next.value.promise).then((value) => {\n",
+              "    // Cache the last promise value to make it available to the next\n",
+              "    // step of the generator.\n",
+              "    outputElement.lastPromiseValue = value;\n",
+              "    return next.value.response;\n",
+              "  });\n",
+              "}\n",
+              "\n",
+              "/**\n",
+              " * Generator function which is called between each async step of the upload\n",
+              " * process.\n",
+              " * @param {string} inputId Element ID of the input file picker element.\n",
+              " * @param {string} outputId Element ID of the output display.\n",
+              " * @return {!Iterable<!Object>} Iterable of next steps.\n",
+              " */\n",
+              "function* uploadFilesStep(inputId, outputId) {\n",
+              "  const inputElement = document.getElementById(inputId);\n",
+              "  inputElement.disabled = false;\n",
+              "\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  outputElement.innerHTML = '';\n",
+              "\n",
+              "  const pickedPromise = new Promise((resolve) => {\n",
+              "    inputElement.addEventListener('change', (e) => {\n",
+              "      resolve(e.target.files);\n",
+              "    });\n",
+              "  });\n",
+              "\n",
+              "  const cancel = document.createElement('button');\n",
+              "  inputElement.parentElement.appendChild(cancel);\n",
+              "  cancel.textContent = 'Cancel upload';\n",
+              "  const cancelPromise = new Promise((resolve) => {\n",
+              "    cancel.onclick = () => {\n",
+              "      resolve(null);\n",
+              "    };\n",
+              "  });\n",
+              "\n",
+              "  // Wait for the user to pick the files.\n",
+              "  const files = yield {\n",
+              "    promise: Promise.race([pickedPromise, cancelPromise]),\n",
+              "    response: {\n",
+              "      action: 'starting',\n",
+              "    }\n",
+              "  };\n",
+              "\n",
+              "  cancel.remove();\n",
+              "\n",
+              "  // Disable the input element since further picks are not allowed.\n",
+              "  inputElement.disabled = true;\n",
+              "\n",
+              "  if (!files) {\n",
+              "    return {\n",
+              "      response: {\n",
+              "        action: 'complete',\n",
+              "      }\n",
+              "    };\n",
+              "  }\n",
+              "\n",
+              "  for (const file of files) {\n",
+              "    const li = document.createElement('li');\n",
+              "    li.append(span(file.name, {fontWeight: 'bold'}));\n",
+              "    li.append(span(\n",
+              "        `(${file.type || 'n/a'}) - ${file.size} bytes, ` +\n",
+              "        `last modified: ${\n",
+              "            file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() :\n",
+              "                                    'n/a'} - `));\n",
+              "    const percent = span('0% done');\n",
+              "    li.appendChild(percent);\n",
+              "\n",
+              "    outputElement.appendChild(li);\n",
+              "\n",
+              "    const fileDataPromise = new Promise((resolve) => {\n",
+              "      const reader = new FileReader();\n",
+              "      reader.onload = (e) => {\n",
+              "        resolve(e.target.result);\n",
+              "      };\n",
+              "      reader.readAsArrayBuffer(file);\n",
+              "    });\n",
+              "    // Wait for the data to be ready.\n",
+              "    let fileData = yield {\n",
+              "      promise: fileDataPromise,\n",
+              "      response: {\n",
+              "        action: 'continue',\n",
+              "      }\n",
+              "    };\n",
+              "\n",
+              "    // Use a chunked sending to avoid message size limits. See b/62115660.\n",
+              "    let position = 0;\n",
+              "    do {\n",
+              "      const length = Math.min(fileData.byteLength - position, MAX_PAYLOAD_SIZE);\n",
+              "      const chunk = new Uint8Array(fileData, position, length);\n",
+              "      position += length;\n",
+              "\n",
+              "      const base64 = btoa(String.fromCharCode.apply(null, chunk));\n",
+              "      yield {\n",
+              "        response: {\n",
+              "          action: 'append',\n",
+              "          file: file.name,\n",
+              "          data: base64,\n",
+              "        },\n",
+              "      };\n",
+              "\n",
+              "      let percentDone = fileData.byteLength === 0 ?\n",
+              "          100 :\n",
+              "          Math.round((position / fileData.byteLength) * 100);\n",
+              "      percent.textContent = `${percentDone}% done`;\n",
+              "\n",
+              "    } while (position < fileData.byteLength);\n",
+              "  }\n",
+              "\n",
+              "  // All done.\n",
+              "  yield {\n",
+              "    response: {\n",
+              "      action: 'complete',\n",
+              "    }\n",
+              "  };\n",
+              "}\n",
+              "\n",
+              "scope.google = scope.google || {};\n",
+              "scope.google.colab = scope.google.colab || {};\n",
+              "scope.google.colab._files = {\n",
+              "  _uploadFiles,\n",
+              "  _uploadFilesContinue,\n",
+              "};\n",
+              "})(self);\n",
+              "</script> "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Saving creditcard_test.csv to creditcard_test.csv\n",
+            "Saving creditcard_train.csv to creditcard_train.csv\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train = pd.read_csv('creditcard_train.csv')\n",
+        "test = pd.read_csv('creditcard_test.csv')\n",
+        "train.shape,test.shape"
+      ],
+      "metadata": {
+        "id": "Im5XTbuLtrsL",
+        "outputId": "e85141b1-8188-4013-c67d-751b4aec0154",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 83,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((25519, 19), (7591, 18))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 83
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.head(3)"
+      ],
+      "metadata": {
+        "id": "K7eMnqMmt1kT",
+        "outputId": "944a86f8-08a3-47dc-e36b-fcf4da032615",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 215
+        }
+      },
+      "execution_count": 61,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "        ID CODE_GENDER FLAG_OWN_CAR FLAG_OWN_REALTY  CNT_CHILDREN  \\\n",
+              "0  5010092           F            N               N             0   \n",
+              "1  5116701           M            N               Y             1   \n",
+              "2  5069290           F            N               Y             0   \n",
+              "\n",
+              "   AMT_INCOME_TOTAL      NAME_INCOME_TYPE            NAME_EDUCATION_TYPE  \\\n",
+              "0          225000.0  Commercial associate  Secondary / secondary special   \n",
+              "1          112500.0  Commercial associate  Secondary / secondary special   \n",
+              "2          270000.0  Commercial associate              Incomplete higher   \n",
+              "\n",
+              "  NAME_FAMILY_STATUS  NAME_HOUSING_TYPE  DAYS_BIRTH  DAYS_EMPLOYED  \\\n",
+              "0            Married  House / apartment      -10304          -1682   \n",
+              "1            Married  House / apartment      -10189          -1189   \n",
+              "2            Married  House / apartment      -14783          -3397   \n",
+              "\n",
+              "   FLAG_MOBIL  FLAG_WORK_PHONE  FLAG_PHONE  FLAG_EMAIL OCCUPATION_TYPE  \\\n",
+              "0           1                0           0           0        Laborers   \n",
+              "1           1                1           1           0             NaN   \n",
+              "2           1                0           0           0      Core staff   \n",
+              "\n",
+              "   CNT_FAM_MEMBERS  STATUS  \n",
+              "0              2.0       0  \n",
+              "1              3.0       0  \n",
+              "2              2.0       0  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-c0ca8f63-953f-4590-a200-f699b4ecfd07\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>ID</th>\n",
+              "      <th>CODE_GENDER</th>\n",
+              "      <th>FLAG_OWN_CAR</th>\n",
+              "      <th>FLAG_OWN_REALTY</th>\n",
+              "      <th>CNT_CHILDREN</th>\n",
+              "      <th>AMT_INCOME_TOTAL</th>\n",
+              "      <th>NAME_INCOME_TYPE</th>\n",
+              "      <th>NAME_EDUCATION_TYPE</th>\n",
+              "      <th>NAME_FAMILY_STATUS</th>\n",
+              "      <th>NAME_HOUSING_TYPE</th>\n",
+              "      <th>DAYS_BIRTH</th>\n",
+              "      <th>DAYS_EMPLOYED</th>\n",
+              "      <th>FLAG_MOBIL</th>\n",
+              "      <th>FLAG_WORK_PHONE</th>\n",
+              "      <th>FLAG_PHONE</th>\n",
+              "      <th>FLAG_EMAIL</th>\n",
+              "      <th>OCCUPATION_TYPE</th>\n",
+              "      <th>CNT_FAM_MEMBERS</th>\n",
+              "      <th>STATUS</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>5010092</td>\n",
+              "      <td>F</td>\n",
+              "      <td>N</td>\n",
+              "      <td>N</td>\n",
+              "      <td>0</td>\n",
+              "      <td>225000.0</td>\n",
+              "      <td>Commercial associate</td>\n",
+              "      <td>Secondary / secondary special</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>House / apartment</td>\n",
+              "      <td>-10304</td>\n",
+              "      <td>-1682</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Laborers</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>5116701</td>\n",
+              "      <td>M</td>\n",
+              "      <td>N</td>\n",
+              "      <td>Y</td>\n",
+              "      <td>1</td>\n",
+              "      <td>112500.0</td>\n",
+              "      <td>Commercial associate</td>\n",
+              "      <td>Secondary / secondary special</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>House / apartment</td>\n",
+              "      <td>-10189</td>\n",
+              "      <td>-1189</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>3.0</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>5069290</td>\n",
+              "      <td>F</td>\n",
+              "      <td>N</td>\n",
+              "      <td>Y</td>\n",
+              "      <td>0</td>\n",
+              "      <td>270000.0</td>\n",
+              "      <td>Commercial associate</td>\n",
+              "      <td>Incomplete higher</td>\n",
+              "      <td>Married</td>\n",
+              "      <td>House / apartment</td>\n",
+              "      <td>-14783</td>\n",
+              "      <td>-3397</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Core staff</td>\n",
+              "      <td>2.0</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-c0ca8f63-953f-4590-a200-f699b4ecfd07')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-c0ca8f63-953f-4590-a200-f699b4ecfd07 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-c0ca8f63-953f-4590-a200-f699b4ecfd07');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-a65a1cab-c6dd-4f7b-8eaa-864962cdc2aa\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-a65a1cab-c6dd-4f7b-8eaa-864962cdc2aa')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-a65a1cab-c6dd-4f7b-8eaa-864962cdc2aa button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "train",
+              "summary": "{\n  \"name\": \"train\",\n  \"rows\": 25519,\n  \"fields\": [\n    {\n      \"column\": \"ID\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 41861,\n        \"min\": 5008804,\n        \"max\": 5150487,\n        \"num_unique_values\": 25519,\n        \"samples\": [\n          5033566,\n          5137279,\n          5143452\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"CODE_GENDER\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"M\",\n          \"F\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_OWN_CAR\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Y\",\n          \"N\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_OWN_REALTY\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Y\",\n          \"N\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"CNT_CHILDREN\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 0,\n        \"max\": 19,\n        \"num_unique_values\": 9,\n        \"samples\": [\n          7,\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"AMT_INCOME_TOTAL\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 102781.72234177226,\n        \"min\": 27000.0,\n        \"max\": 1575000.0,\n        \"num_unique_values\": 254,\n        \"samples\": [\n          87750.0,\n          135000.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"NAME_INCOME_TYPE\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 5,\n        \"samples\": [\n          \"Working\",\n          \"Student\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"NAME_EDUCATION_TYPE\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 5,\n        \"samples\": [\n          \"Incomplete higher\",\n          \"Academic degree\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"NAME_FAMILY_STATUS\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 5,\n        \"samples\": [\n          \"Widow\",\n          \"Separated\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"NAME_HOUSING_TYPE\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 6,\n        \"samples\": [\n          \"House / apartment\",\n          \"With parents\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"DAYS_BIRTH\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 4204,\n        \"min\": -25152,\n        \"max\": -7705,\n        \"num_unique_values\": 6531,\n        \"samples\": [\n          -14476,\n          -10151\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"DAYS_EMPLOYED\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 138017,\n        \"min\": -15661,\n        \"max\": 365243,\n        \"num_unique_values\": 3408,\n        \"samples\": [\n          -11398,\n          -1627\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_MOBIL\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 1,\n        \"max\": 1,\n        \"num_unique_values\": 1,\n        \"samples\": [\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_WORK_PHONE\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 0,\n        \"max\": 1,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_PHONE\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 0,\n        \"max\": 1,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"FLAG_EMAIL\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 0,\n        \"max\": 1,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"OCCUPATION_TYPE\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 18,\n        \"samples\": [\n          \"Laborers\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"CNT_FAM_MEMBERS\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0.9168322894737855,\n        \"min\": 1.0,\n        \"max\": 20.0,\n        \"num_unique_values\": 10,\n        \"samples\": [\n          9.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"STATUS\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 0,\n        \"max\": 1,\n        \"num_unique_values\": 2,\n        \"samples\": [\n          1\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 61
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train['OCCUPATION_TYPE'] = train['OCCUPATION_TYPE'].fillna('X')"
+      ],
+      "metadata": {
+        "id": "IKm9m3JcutkU"
+      },
+      "execution_count": 81,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "cols = train.select_dtypes(include='O').columns\n",
+        "\n",
+        "for col in cols:\n",
+        "  set_train = set(train[col])\n",
+        "  set_test = set(test[col])\n",
+        "  same = set_train == set_test\n",
+        "  if same:\n",
+        "    print(col,\"일치\")\n",
+        "  else :\n",
+        "    print(col,\"불일치 \")"
+      ],
+      "metadata": {
+        "id": "gzVvCf9ivBVR",
+        "outputId": "04d20084-d2ed-4ae3-a52e-853bf4617855",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 82,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "CODE_GENDER 일치\n",
+            "FLAG_OWN_CAR 일치\n",
+            "FLAG_OWN_REALTY 일치\n",
+            "NAME_INCOME_TYPE 일치\n",
+            "NAME_EDUCATION_TYPE 일치\n",
+            "NAME_FAMILY_STATUS 일치\n",
+            "NAME_HOUSING_TYPE 일치\n",
+            "OCCUPATION_TYPE 불일치 \n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.dropna(subset=['OCCUPATION_TYPE'],inplace=True)"
+      ],
+      "metadata": {
+        "id": "Ej41v2S7xsiA"
+      },
+      "execution_count": 84,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "target =train.pop('STATUS')"
+      ],
+      "metadata": {
+        "id": "MfqXDGgsvu57"
+      },
+      "execution_count": 85,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train= pd.get_dummies(train)\n",
+        "test = pd.get_dummies(test)"
+      ],
+      "metadata": {
+        "id": "GiCQ_kr0y5yg"
+      },
+      "execution_count": 87,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_tr,X_val,y_tr,y_val = train_test_split(train,target,test_size=0.2,random_state=0)\n",
+        "\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "rf = RandomForestClassifier(random_state=0)\n",
+        "rf.fit(X_tr,y_tr)\n",
+        "pred = rf.predict(X_val)\n",
+        "\n",
+        "from sklearn.metrics import f1_score\n",
+        "f1 =f1_score(y_val,pred)\n",
+        "print(f1)"
+      ],
+      "metadata": {
+        "id": "9L-NqE23yLII",
+        "outputId": "24a8c3cc-eda9-4b21-aa14-eff146e7be62",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 91,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.22018348623853212\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 성능 개선\n",
+        "    f1 스코어는 1에 가까울 수록 좋은 지표이다.\n",
+        "    불균형 데이터일 경우 평가지표가 낮게 나올 수 있다.\n",
+        "    -> class_weight = 'balanced'로 설정\n",
+        "    레이블 인코딩 실행"
+      ],
+      "metadata": {
+        "id": "pZVg-ovN0fAg"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train = pd.read_csv('creditcard_train.csv')\n",
+        "test = pd.read_csv('creditcard_test.csv')\n",
+        "train.shape,test.shape"
+      ],
+      "metadata": {
+        "id": "tsj6chKZ01hc",
+        "outputId": "79117249-a699-4177-a6b1-34bb52b8a286",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 104,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((25519, 19), (7591, 18))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 104
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "target = train.pop('STATUS')"
+      ],
+      "metadata": {
+        "id": "4DTpd9lj0dm3"
+      },
+      "execution_count": 105,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train.shape,test.shape"
+      ],
+      "metadata": {
+        "id": "UPCQBYuq09QH",
+        "outputId": "ec15aa36-aa20-47c6-c979-7d3a22641bcb",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 106,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "((25519, 18), (7591, 18))"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 106
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# 결측치 처리\n",
+        "data = train['OCCUPATION_TYPE'].mode()[0]\n",
+        "train['OCCUPATION_TYPE'] = train['OCCUPATION_TYPE'].fillna(data)\n",
+        "test['OCCUPATION_TYPE'] = test['OCCUPATION_TYPE'].fillna(data)"
+      ],
+      "metadata": {
+        "id": "D8VkJoAs1JDa"
+      },
+      "execution_count": 107,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train = train.drop('ID',axis=1)\n",
+        "test = test.drop('ID',axis=1)"
+      ],
+      "metadata": {
+        "id": "q5UVXk0Z1WtA"
+      },
+      "execution_count": 108,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.preprocessing import LabelEncoder\n",
+        "cols = train.select_dtypes(include='O').columns\n",
+        "for col in cols:\n",
+        "  le = LabelEncoder()\n",
+        "  train[col] = le.fit_transform(train[col])\n",
+        "  test[col] = le.transform(test[col])"
+      ],
+      "metadata": {
+        "id": "th0GXpdH0-Xw"
+      },
+      "execution_count": 109,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_tr,X_val,y_tr,y_val = train_test_split(train,target,test_size=0.2,random_state=0)\n",
+        "\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "rf = RandomForestClassifier(n_estimators=200,class_weight='balanced',random_state=0)\n",
+        "rf.fit(X_tr,y_tr)\n",
+        "pred = rf.predict(X_val)\n",
+        "\n",
+        "from sklearn.metrics import f1_score\n",
+        "f1 =f1_score(y_val,pred)\n",
+        "print(f1)\n",
+        "\n",
+        "pred  = rf.predict(test)\n",
+        "submit = pd.DataFrame({'pred':pred})\n",
+        "submit.to_csv(\"result.csv\",index = False)"
+      ],
+      "metadata": {
+        "id": "D0WcheYy1zWv",
+        "outputId": "71d97bbc-23a1-4f95-d219-929e5313b764",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 110,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "0.3253968253968254\n"
+          ]
         }
       ]
     }
