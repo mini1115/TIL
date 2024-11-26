@@ -1,0 +1,61 @@
+import pandas as pd
+
+train = pd.read_csv("data/customer_train.csv")
+test = pd.read_csv("data/customer_test.csv")
+
+# 사용자 코딩
+# print(train.shape,test.shape)
+m = train['환불금액'].mean()
+train['환불금액'] = train['환불금액'].fillna(m)
+test['환불금액'] = test['환불금액'].fillna(m)
+
+target = train.pop('성별')
+train.pop('회원ID')
+test.pop('회원ID')
+cols = train.select_dtypes(exclude=['O']).columns
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+train[cols] = scaler.fit_transform(train[cols])
+test[cols] = scaler.transform(test[cols])
+
+
+combined = pd.concat([train,test])
+combined_oh = pd.get_dummies(combined)
+train = combined_oh[:len(train)]
+test = combined_oh[len(train):]
+
+
+# cols = train.select_dtypes(include='O').columns
+# from sklearn.preprocessing import LabelEncoder
+
+# for col in cols:
+# 	le = LabelEncoder()
+# 	train[col] = le.fit_transform(train[col])
+# 	test[col] = le.transform(test[col])
+
+from sklearn.model_selection import train_test_split
+x_tr,x_val,y_tr,y_val = train_test_split(train,target,test_size=0.2,random_state=0)
+# print(x_tr.shape,x_val.shape,y_tr.shape,y_val.shape)
+
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(max_depth=5,n_estimators=500,random_state=0)
+rf.fit(x_tr,y_tr)
+pred = rf.predict_proba(x_val)
+
+# import lightgbm as lgb
+# lg = lgb.LGBMClassifier(random_state=0,verbose=-1)
+# lg.fit(x_tr,y_tr)
+# pred = lg.predict_proba(x_val)
+
+from sklearn.metrics import roc_auc_score
+score = roc_auc_score(y_val,pred[:,1])
+print(score)
+# 0.6288
+
+pred = rf.predict_proba(test)
+submit = pd.DataFrame({'pred':pred[:,1]})
+submit.to_csv('result.csv',index=False)
+print(pd.read_csv('result.csv').head())
+# 답안 제출 참고
+# 아래 코드는 예시이며 변수명 등 개인별로 변경하여 활용
+# pd.DataFrame변수.to_csv("result.csv", index=False)
