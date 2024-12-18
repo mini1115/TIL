@@ -10,31 +10,20 @@ public class Main {
         int endIndex = map[0];
         int target = map[1];
         
-        boolean[] judge = new boolean[endIndex+1];
-        judge[1] = true;
+        boolean[] isPrime = new boolean[endIndex+1];
+        isPrime[1] = true;
         int count = 0;
         
-        for(int i=2;i<=endIndex;i++){
-            if(!judge[i]){
-                judge[i] = true;
-                count++;
-                if(count==target){
-                    System.out.println(i);
-                    return;
-                }
-                else{
-                    int j=2;
-                    
-                    while( (i*j) <= endIndex){
-                        if(!judge[i*j]){
-                            judge[i*j] = true;
-                            count++;
-                            if(count==target){
-                                System.out.println(i*j);
-                                return;
-                            }
+        for(int i = 2; i <= endIndex; i++){
+            if(!isPrime[i]){
+                for (int j = i; j <= endIndex; j += i) {
+                    if(!isPrime[j]){
+                        isPrime[j] = true;
+                        count++;
+                        if(count == target){
+                            System.out.print(j);
+                            return;
                         }
-                        j++;
                     }
                 }
             }
