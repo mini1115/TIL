@@ -2,34 +2,30 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-
-    
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         int N = Integer.parseInt(br.readLine());
         
-        int[][] info = new int[N][2];
-        for(int i=0;i<N;i++){
-            int[] data = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            // time
-            info[i][0] = data[0];
-            // value
-            info[i][1] = data[1];
+        int[] T = new int[N+1];
+        int[] P = new int[N+1];
+        
+        for(int i=1;i<=N;i++){
+            int [] temp = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            T[i] = temp[0];
+            P[i] = temp[1];
         }
-        
-        
-        int[] dp = new int[N+1];
         
         int maxValue = 0;
         
-        for(int i=N-1;i>=0;i--){
-            int time = info[i][0] + i;
+        int[] dp = new int[N+2];
+        
+        for(int i=N;i>=1;i--){
+            int time = T[i] + i;
             
-            if(time<=N){
-                dp[i] = Math.max(maxValue,dp[time]+info[i][1]);
-                
-                maxValue = dp[i];
+            if(time <=N+1){
+                dp[i] = Math.max(maxValue,P[i]+dp[time]);
+                maxValue = dp[i]; 
             }else{
                 dp[i] = maxValue;
             }
